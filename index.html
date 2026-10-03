@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+window.onerror=function(msg,src,line,col,err){window.parent.postMessage({type:'app-error',message:msg,source:src,lineno:line,colno:col,stack:err&&err.stack||''},'*');};
+window.onunhandledrejection=function(e){window.parent.postMessage({type:'app-error',message:'Unhandled promise rejection: '+(e.reason&&e.reason.message||e.reason||'unknown'),stack:e.reason&&e.reason.stack||''},'*');};
+window.addEventListener('error',function(e){var t=e&&e.target;if(t&&t!==window&&t.tagName==='SCRIPT'){var u=t.src||'';window.parent.postMessage({type:'app-error',message:'Failed to load script'+(u?': '+u:' (inline module)'),source:u},'*');}},true);
+(function(){var _f=window.fetch;window.fetch=function(){var a=arguments,u=typeof a[0]==='string'?a[0]:(a[0]&&a[0].url)||'';var p=_f.apply(this,a);p.then(function(r){if(r.status===500){r.clone().text().then(function(b){window.parent.postMessage({type:'fetch-error',url:u,status:500,body:b},'*');}).catch(function(){window.parent.postMessage({type:'fetch-error',url:u,status:500,body:''},'*');});}}).catch(function(e){window.parent.postMessage({type:'fetch-error',url:u,status:0,body:e.message||'fetch failed'},'*');});return p;};})();
+</script>
+<script src="https://builder.puter.com/runtime.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#123d2c">
+<meta name="description" content="Classic Klondike solitaire with drag-and-drop, hints, undo and sound.">
+<title>Solitaire</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+    <!-- puter-pwa: generated, do not edit -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon-180.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Solitaire">
+    <!-- /puter-pwa -->
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"><i data-lucide="spade"></i></span>
+      <span class="brand-name">Solitaire</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-label">Score</span><span class="stat-value" id="score">0</span></div>
+      <div class="stat"><span class="stat-label">Moves</span><span class="stat-value" id="moves">0</span></div>
+      <div class="stat"><span class="stat-label">Time</span><span class="stat-value" id="time">0:00</span></div>
+    </div>
+
+    <div class="actions">
+      <div class="seg" role="group" aria-label="Draw mode">
+        <button data-draw="1" class="seg-btn">Draw 1</button>
+        <button data-draw="3" class="seg-btn">Draw 3</button>
+      </div>
+      <button class="btn" id="undoBtn" title="Undo (Ctrl+Z)"><i data-lucide="undo-2"></i><span class="lbl">Undo</span></button>
+      <button class="btn" id="hintBtn" title="Hint (H)"><i data-lucide="lightbulb"></i><span class="lbl">Hint</span></button>
+      <button class="btn icon-only" id="soundBtn" title="Toggle sound">
+        <span class="ico-on"><i data-lucide="volume-2"></i></span>
+        <span class="ico-off"><i data-lucide="volume-x"></i></span>
+      </button>
+      <button class="btn primary" id="newBtn" title="New game (N)"><i data-lucide="shuffle"></i><span class="lbl">New game</span></button>
+    </div>
+  </header>
+
+  <main id="table">
+    <div id="board"></div>
+    <button id="autoBtn" class="auto-btn hidden"><i data-lucide="wand-sparkles"></i><span>Auto finish</span></button>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <canvas id="winCanvas"></canvas>
+
+  <div id="winModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="trophy"><i data-lucide="trophy"></i></div>
+      <h2>You won!</h2>
+      <p class="sub">Every card is home. Nicely played.</p>
+      <div class="win-stats">
+        <div><span class="stat-label">Time</span><span class="stat-value" id="winTime">0:00</span></div>
+        <div><span class="stat-label">Moves</span><span class="stat-value" id="winMoves">0</span></div>
+        <div><span class="stat-label">Score</span><span class="stat-value" id="winScore">0</span></div>
+      </div>
+      <button class="btn primary wide" id="playAgainBtn"><i data-lucide="shuffle"></i><span>Play again</span></button>
+    </div>
+  </div>
+
+  <script type="module" src="game.js"></script>
+</body>
+</html>
